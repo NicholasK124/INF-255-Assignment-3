@@ -153,6 +153,30 @@ function toggleAdoption(animalId) {
 // ------------------------------------
 
 function updateDisplay() {
+  let animalList = animals.slice();
+  if (activeFilter === "available") {
+    animalList = animalList.filter(function (animal) {
+      return animal.adopted === false;
+    });
+  }
+  if (activeFilter === "adopted") {
+    animalList = animalList.filter(function (animal) {
+      return animal.adopted === true;
+    });
+  }
+  if (activeSort === "name") {
+    animalList.sort(function (a, b) {
+      return a.name.localeCompare(b.name);
+    });
+  }
+  if (activeSort === "age") {
+    animalList.sort(function (a, b) {
+      return a.age - b.age;
+    });
+  }
+
+  displayAnimals(animalList);
+  updateCount();
   /*
    * TODO #3: Prepare the animals the user wants to see.
    *
