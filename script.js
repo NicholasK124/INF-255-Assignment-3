@@ -66,11 +66,11 @@ function displayAnimals(animalArray) {
 
     // Create the animal's species
     const animalSpecies = document.createElement("p");
-    animalSpecies.textContent = "Species: ${animal.species}";
+    animalSpecies.textContent = "Species: " + animal.species;
 
     // Create the animal's age
     const animalAge = document.createElement("p");
-    animalAge.textContent = "Age: ${animal.age}";
+    animalAge.textContent = "Age: " + animal.age;
 
     // Create the animal's status
     const animalStatus = document.createElement("p");
@@ -154,16 +154,19 @@ function toggleAdoption(animalId) {
 
 function updateDisplay() {
   let animalList = animals.slice();
+  //filtered all animals where adopted is false
   if (activeFilter === "available") {
     animalList = animalList.filter(function (animal) {
       return animal.adopted === false;
     });
   }
+  // filter all animals where adopted is true
   if (activeFilter === "adopted") {
     animalList = animalList.filter(function (animal) {
       return animal.adopted === true;
     });
   }
+  //Sorting the animals by name and age
   if (activeSort === "name") {
     animalList.sort(function (a, b) {
       return a.name.localeCompare(b.name);
@@ -204,6 +207,21 @@ function updateDisplay() {
 // ------------------------------------
 
 function updateCount() {
+  // 1. Select the #animal-count paragraph.
+  const message = document.querySelector("#animal-count");
+
+  // 2. Use filter() on the full animals array (not just the visible
+  // cards) to find the animals that are not adopted.
+  const availableAnimals = animals.filter(function (animal) {
+    return animal.adopted === false;
+  });
+
+  message.textContent =
+    availableAnimals.length +
+    " of " +
+    animals.length +
+    " animals are not able to be adopted";
+
   /*
    * TODO #4: Show how many animals are still available.
    *
@@ -230,6 +248,29 @@ const availableButton = document.querySelector("#show-available");
 const adoptedButton = document.querySelector("#show-adopted");
 const sortSelect = document.querySelector("#sort-animals");
 
+// ALL BUTTON
+allButton.addEventListener("click", function () {
+  activeFilter = "all";
+  updateDisplay();
+});
+
+//AVAILABLE BUTTON
+availableButton.addEventListener("click", function () {
+  activeFilter = "available";
+  updateDisplay();
+});
+
+//ADOPTED BUTTON
+adoptedButton.addEventListener("click", function () {
+  activeFilter = "adopted";
+  updateDisplay();
+});
+
+//SORT BY BUTTON
+sortSelect.addEventListener("change", function () {
+  activeSort = sortSelect.value;
+  updateDisplay();
+});
 /*
  * TODO #5: Connect the controls to updateDisplay().
  *
